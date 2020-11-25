@@ -19,8 +19,8 @@ end controlpath;
 architecture Behavioral of controlpath is
  constant zeros_N : unsigned(N - 1 downto 0) := (others => '0');
  type states is (loadData, checkBits, add, subtract, shiftProduct, waitState);
- signal cState, nState : states;
- signal cnt : unsigned(N downto 0) := '1' & zeros_N;
+ signal cState, nState : states;						
+ signal cnt : unsigned(N downto 0) := '1' & zeros_N;	-- N + 1 bit ring counter used for counting number of right shifts
  signal shiftP_sig : STD_LOGIC;
 begin
     shiftP <= shiftP_sig;
@@ -28,7 +28,7 @@ begin
 	begin
 		if rising_edge(clk) then
 		    if reset = '1' then 
-		        cnt <= '1' & zeros_N;
+		        cnt <= '1' & zeros_N;	
 			elsif shiftP_sig = '1' then
 				cnt <= shift_right(cnt, 1);
 			end if;

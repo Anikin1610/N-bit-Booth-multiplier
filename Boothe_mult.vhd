@@ -1,16 +1,20 @@
+-------------------------------------------------------------------------------------------------
+-- Author : Anirudh Srinivasan
+-- Program : N - bit Booth Multiplier
+-------------------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity Boothe_mult is
-    generic ( N : integer := 4 );
-	port (	clk : in STD_LOGIC;
-			start : in STD_LOGIC;
-			reset : in STD_LOGIC;
-			data_bus : in STD_LOGIC_VECTOR((2 * N) - 1 downto 0);
+    generic ( N : integer := 4 );   -- NUmber of bits in multiplier and multiplicand
+	port (	clk : in STD_LOGIC;     -- External clock signal
+			start : in STD_LOGIC;   -- External signal to start multiplication
+			reset : in STD_LOGIC;   -- External signal to reset the datapath and control path
+			data_bus : in STD_LOGIC_VECTOR((2 * N) - 1 downto 0);    -- Databus over which multiplicand and multiplier are sent simulataneously
 			
-			ready : out STD_LOGIC;
-			product : out STD_LOGIC_VECTOR((2 * N) - 1 downto 0));
+			ready : out STD_LOGIC;  -- Internal signal to assert that multplication is finished
+			product : out STD_LOGIC_VECTOR((2 * N) - 1 downto 0));   -- Final output
 end Boothe_mult;
 
 architecture mult_beh of Boothe_mult is
@@ -38,10 +42,10 @@ architecture mult_beh of Boothe_mult is
 					ready : out STD_LOGIC);
 	end component;
 	
-	signal M : STD_LOGIC_VECTOR (N - 1 downto 0) := (others => '0');
-	signal P : STD_LOGIC_VECTOR (2 * N downto 0) := (others => '0');
+	signal M : STD_LOGIC_VECTOR (N - 1 downto 0) := (others => '0');   -- Register to hold the multiplicand
+	signal P : STD_LOGIC_VECTOR (2 * N downto 0) := (others => '0');   -- Register to hold the initial multiplier and final product
 	signal Sum : STD_LOGIC_VECTOR((2 * N) - 1 downto 0);
-	signal MUX : STD_LOGIC_VECTOR((4 * N) - 1 downto 0);
+	signal MUX : STD_LOGIC_VECTOR((4 * N) - 1 downto 0);   -- Multiplexer used for loading the multiplier into the P register during initialization
 	signal shiftP, loadM, loadP, loadMultiplier, subAssert : STD_LOGIC;
 	
 	constant zeros_N : STD_LOGIC_VECTOR(N - 1 downto 0) := (others => '0');
@@ -78,19 +82,19 @@ begin
 	begin
 		if rising_edge(clk) then
 		    if reset = '1' then 
-		        M <= (others => '0');
-		        P <= (others => '0');
+		        M <= (others => '0');	-- Clear M Register
+		        P <= (others => '0');	-- Clear P Register
 		    else
 		      if loadM = '1' then
-			    M <= data_bus((2 * N) - 1 downto N);
+			    M <= data_bus((2 * N) - 1 downto N);	-- Initialize M Register
 			  end if;
 			
 			  if loadP = '1' then
-                P((2 * N) downto 1) <= Sum;
+                P((2 * N) downto 1) <= Sum;		-- Load MUX output into P Register
 			  end if;
 			
 			  if shiftP = '1' then
-				P <= (P((2 * N)) & P((2 * N) downto 1));
+				P <= (P((2 * N)) & P((2 * N) downto 1));	-- Shift Right the contents of P register by 1 bit
 			  end if;
 	   	   end if;
 	   	end if;
