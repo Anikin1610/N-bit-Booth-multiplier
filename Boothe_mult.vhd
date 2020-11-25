@@ -60,26 +60,26 @@ begin
 
 	product <= P(2 * N downto 1);
 	adder : adder_Nbit 
-	generic map (  N => 2 * N ) 
-	port map (	ip1 => MUX((4 * N) - 1 downto 2 * N),
-	            ip2 => MUX((2 * N) - 1 downto 0),
-				sub => subAssert,
-				op_carry => open,
-				op => Sum);
+			generic map (  N => 2 * N ) 
+			port map 	(	ip1 => MUX((4 * N) - 1 downto 2 * N),
+	            			ip2 => MUX((2 * N) - 1 downto 0),
+							sub => subAssert,
+							op_carry => open,
+							op => Sum);
 													
 	control_path : controlpath 
-	               generic map (  N => N ) 
-	               port map	(	clk => clk,
-								start => start,
-								reset => reset,
-								P_2LSBits => P(1 downto 0),
-								shiftP => shiftP,
-								subAssert => subAssert,
-								loadM => loadM,
-								loadP => loadP,
-								clearRegs =>  clearRegs,
-								loadMultiplier => loadMultiplier,
-								ready => ready);
+	        generic map (  N => N ) 
+	        port map	(	clk => clk,
+							start => start,
+							reset => reset,
+							P_2LSBits => P(1 downto 0),
+							shiftP => shiftP,
+							subAssert => subAssert,
+							loadM => loadM,
+							loadP => loadP,
+							clearRegs =>  clearRegs,
+							loadMultiplier => loadMultiplier,
+							ready => ready);
 										
 	main : process(clk)
 	begin
@@ -88,18 +88,18 @@ begin
 		        M <= (others => '0');	-- Clear M register
 		        P <= (others => '0');	-- Clear P register
 		    else
-		      if loadM = '1' then
-			    M <= data_bus((2 * N) - 1 downto N);	-- Initialize M Register
-			  end if;
+		      	if loadM = '1' then
+			    	M <= data_bus((2 * N) - 1 downto N);	-- Initialize M Register
+			  	end if;
 			
-			  if loadP = '1' then
-                P((2 * N) downto 1) <= Sum;		-- Load MUX output into P Register
-			  end if;
+			  	if loadP = '1' then
+                	P((2 * N) downto 1) <= Sum;		-- Load MUX output into P Register
+			  	end if;
 			
-			  if shiftP = '1' then
-				P <= (P((2 * N)) & P((2 * N) downto 1));	-- Shift Right the contents of P register by 1 bit
-			  end if;
-	   	   end if;
+			  	if shiftP = '1' then
+					P <= (P((2 * N)) & P((2 * N) downto 1));	-- Shift Right the contents of P register by 1 bit
+			  	end if;
+	   	   	end if;
 	   	end if;
 	end process;
 	
