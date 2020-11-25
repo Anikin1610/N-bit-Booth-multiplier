@@ -20,6 +20,15 @@ end controlpath;
 architecture Behavioral of controlpath is
  constant zeros_N : unsigned(N - 1 downto 0) := (others => '0');
  type states is (loadData, checkBits, add, subtract, shiftProduct, rst, waitState);
+----------------------------------------------------------------------------------------
+-- loadData : Initialize the M register with multiplicand and P register with multiplier
+-- checkBits : Check the least significant 2 bits of the the P register
+-- add : Add the multiplicand to the contents of P register
+-- subtract : Subtract the multiplicand from the contents of the P register
+-- shiftProduct : Shift the P register right by 1 bit
+-- rst : clear the M and P registers
+-- waitState : The multiplier is idle and asserts the ready signal
+----------------------------------------------------------------------------------------
  signal cState, nState : states;
  signal cnt : unsigned(N downto 0) := '1' & zeros_N;
  signal shiftP_sig : STD_LOGIC;
