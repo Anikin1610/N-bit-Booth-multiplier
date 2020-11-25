@@ -1,6 +1,6 @@
-# A parameterized Booth's multiplier written in VHDL.
+# A parameterized N - Bit Booth multiplier written in VHDL.
 
 
-Test bench included.
+
 
 
