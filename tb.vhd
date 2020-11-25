@@ -9,13 +9,13 @@ end entity;
 architecture beh_tb of tb_mult is
     component Boothe_mult is
         generic ( N : integer := 4 );
-        port (	clk : in STD_LOGIC;
-			    start : in STD_LOGIC;
-			    reset : in STD_LOGIC;
-			    data_bus : in STD_LOGIC_VECTOR((2 * N) - 1 downto 0);
-			
-			    ready : out STD_LOGIC;
-			    product : out STD_LOGIC_VECTOR((2 * N) - 1 downto 0));
+        port (  clk : in STD_LOGIC;
+                start : in STD_LOGIC;
+                reset : in STD_LOGIC;
+                data_bus : in STD_LOGIC_VECTOR((2 * N) - 1 downto 0);
+            
+                ready : out STD_LOGIC;
+                product : out STD_LOGIC_VECTOR((2 * N) - 1 downto 0));
     end component;
     
     constant clk_period : time := 1 us;
@@ -28,12 +28,12 @@ begin
 
     UUT : Boothe_mult 
           generic map ( N => num_bits)       
-          port map (clk => clk,
-                    start => start,
-                    reset => reset,
-                    data_bus => data_bus,
-                    ready => ready,
-                    product => product);
+          port map (    clk => clk,
+                        start => start,
+                        reset => reset,
+                        data_bus => data_bus,
+                        ready => ready,
+                        product => product);
     clk_Proc: process
     begin
         clk <= not clk; 
