@@ -85,8 +85,8 @@ begin
 	begin
 		if rising_edge(clk) then
 		    if clearRegs = '1' then 
-		        M <= (others => '0');
-		        P <= (others => '0');
+		        M <= (others => '0');	-- Clear M register
+		        P <= (others => '0');	-- Clear P register
 		    else
 		      if loadM = '1' then
 			    M <= data_bus((2 * N) - 1 downto N);	-- Initialize M Register
