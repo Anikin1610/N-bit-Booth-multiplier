@@ -16,7 +16,7 @@ end Boothe_mult;
 architecture mult_beh of Boothe_mult is
 
 	component adder_Nbit
-		generic (   N : integer := 8);  
+		generic (   N : integer := 8 );  
 		Port	(	ip1 : in  STD_LOGIC_VECTOR (N - 1 downto 0);
 					ip2 : in  STD_LOGIC_VECTOR (N - 1 downto 0);
 					sub : in STD_LOGIC;
@@ -25,7 +25,7 @@ architecture mult_beh of Boothe_mult is
 	end component;
 	
 	component controlpath 
-	    generic (   N : integer := 4);
+	    generic (   N : integer := 4 );
 		port	(	clk : in STD_LOGIC;
 					start : in STD_LOGIC;
 					reset : in STD_LOGIC;
@@ -34,6 +34,7 @@ architecture mult_beh of Boothe_mult is
 					subAssert : out STD_LOGIC;
 					loadM : out STD_LOGIC;
 					loadP : out STD_LOGIC;
+					clearRegs : out STD_LOGIC;
 					loadMultiplier : out STD_LOGIC;
 					ready : out STD_LOGIC);
 	end component;
@@ -42,7 +43,7 @@ architecture mult_beh of Boothe_mult is
 	signal P : STD_LOGIC_VECTOR (2 * N downto 0) := (others => '0');
 	signal Sum : STD_LOGIC_VECTOR((2 * N) - 1 downto 0);
 	signal MUX : STD_LOGIC_VECTOR((4 * N) - 1 downto 0);
-	signal shiftP, loadM, loadP, loadMultiplier, subAssert : STD_LOGIC;
+	signal shiftP, loadM, loadP, loadMultiplier, subAssert, clearRegs : STD_LOGIC;
 	
 	constant zeros_N : STD_LOGIC_VECTOR(N - 1 downto 0) := (others => '0');
 	constant zeros_2N : STD_LOGIC_VECTOR((2 * N) - 1 downto 0) := (others => '0'); 
@@ -71,13 +72,14 @@ begin
 								subAssert => subAssert,
 								loadM => loadM,
 								loadP => loadP,
+								clearRegs =>  clearRegs,
 								loadMultiplier => loadMultiplier,
 								ready => ready);
 										
 	main : process(clk)
 	begin
 		if rising_edge(clk) then
-		    if reset = '1' then 
+		    if clearRegs = '1' then 
 		        M <= (others => '0');
 		        P <= (others => '0');
 		    else

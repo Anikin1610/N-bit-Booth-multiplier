@@ -12,13 +12,14 @@ entity controlpath is
 				subAssert : out STD_LOGIC;
 				loadM : out STD_LOGIC;
 				loadP : out STD_LOGIC;
+				clearRegs : out STD_LOGIC;
 				loadMultiplier : out STD_LOGIC;
 				ready : out STD_LOGIC);
 end controlpath;
 
 architecture Behavioral of controlpath is
  constant zeros_N : unsigned(N - 1 downto 0) := (others => '0');
- type states is (loadData, checkBits, add, subtract, shiftProduct, waitState);
+ type states is (loadData, checkBits, add, subtract, shiftProduct, rst, waitState);
  signal cState, nState : states;
  signal cnt : unsigned(N downto 0) := '1' & zeros_N;
  signal shiftP_sig : STD_LOGIC;
@@ -39,7 +40,7 @@ begin
 	begin
 		if rising_edge(clk) then
 		    if reset = '1' then 
-		      cState <= waitState;
+		      cState <= rst;
 		    elsif start = '1' then
 		      cState <= loadData;
 		    else
@@ -78,6 +79,9 @@ begin
 			
 			when shiftProduct => 
 				nState <= checkBits;
+
+			when rst => 
+				nState <= waitState;	
 			
 			when others =>
 				nState <= waitState;
@@ -93,6 +97,7 @@ begin
 				subAssert <= '0';
 				loadM <= '0';
 				loadP <= '0';
+				clearRegs <= '0';
 				ready <= '1';
 				
 			when loadData =>
@@ -101,6 +106,7 @@ begin
 				subAssert <= '0';
 				loadM <= '1';
 				loadP <= '1';
+				clearRegs <= '0';
 				ready <= '0';
 				
 			when checkbits =>
@@ -109,6 +115,7 @@ begin
 				subAssert <= '0';
 				loadM <= '0';
 				loadP <= '0';
+				clearRegs <= '0';
 				ready <= '0';
 				
 			when add =>
@@ -117,6 +124,7 @@ begin
 				subAssert <= '0';
 				loadM <= '0';
 				loadP <= '1';
+				clearRegs <= '0';
 				ready <= '0';
 			
 			when subtract =>
@@ -125,6 +133,7 @@ begin
 				subAssert <= '1';
 				loadM <= '0';
 				loadP <= '1';
+				clearRegs <= '0';
 				ready <= '0';
 				
 			when shiftProduct =>
@@ -133,6 +142,16 @@ begin
 				subAssert <= '0';
 				loadM <= '0';
 				loadP <= '0';
+				clearRegs <= '0';
+				ready <= '0';
+
+			when rst => 
+				loadMultiplier <= '0';
+				shiftP_sig <= '0';
+				subAssert <= '0';
+				loadM <= '0';
+				loadP <= '0';
+				clearRegs <= '1';
 				ready <= '0';
 				
 			when others =>
