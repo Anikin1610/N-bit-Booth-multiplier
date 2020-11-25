@@ -88,19 +88,19 @@ begin
                 M <= (others => '0');	-- Clear M register
                 P <= (others => '0');	-- Clear P register
             else
-                  if loadM = '1' then
+                if loadM = '1' then
                     M <= data_bus((2 * N) - 1 downto N);	-- Initialize M Register
-                  end if;
+                end if;
             
-                  if loadP = '1' then
+                if loadP = '1' then
                     P((2 * N) downto 1) <= Sum;		-- Load MUX output into P Register
-                  end if;
+                end if;
             
-                  if shiftP = '1' then
+                if shiftP = '1' then
                     P <= (P((2 * N)) & P((2 * N) downto 1));	-- Shift Right the contents of P register by 1 bit
-                  end if;
-                  end if;
-           end if;
+                end if;
+             end if;
+        end if;
     end process;
     
 end mult_beh;
