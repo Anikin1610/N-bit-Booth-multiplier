@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity Boothe_mult is
-    generic ( N : integer := 4 );   -- NUmber of bits in multiplier and multiplicand
+    generic ( N : integer := 4 );   -- Number of bits in multiplier and multiplicand
 	port (	clk : in STD_LOGIC;     -- External clock signal
 			start : in STD_LOGIC;   -- External signal to start multiplication
 			reset : in STD_LOGIC;   -- External signal to reset the datapath and control path
