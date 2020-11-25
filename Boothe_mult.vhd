@@ -53,7 +53,7 @@ begin
 
     MUX <= P(2 * N downto 1) & M & zeros_N when loadMultiplier = '0' else zeros_N & data_bus(N - 1 downto 0) & zeros_2N;
 
-	product <= P(8 downto 1);
+	product <= P(2 * N downto 1);
 	adder : adder_Nbit 
 	generic map (  N => 2 * N ) 
 	port map (	ip1 => MUX((4 * N) - 1 downto 2 * N),
